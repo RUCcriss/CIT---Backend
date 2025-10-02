@@ -11,9 +11,8 @@ namespace Assignment3
     {
         public string? Method { get; set; }
         public string? Path { get; set; }
-        public long? Date { get; set; }
+        public string? Date { get; set; }
         public string? Body { get; set; }
-
     }
 
     //respone klasse
@@ -27,32 +26,13 @@ namespace Assignment3
     {
         private List<string> acceptedM = new List<string> { "read", "create", "echo", "delete", "update" };
 
-        public Response ValidReq(Request request)
+        public Response ValidateRequest(Request request)
         {
             List<string> Errors = new List<string>();
 
-            if (string.IsNullOrEmpty(request.Method))
-            {
-                Errors.Add("missing method");
-            }
-            else if (!acceptedM.Contains(request.Method))
-            {
-                Errors.Add("illegal method");
-            }
-
-            if (string.IsNullOrEmpty(request.Path))
-            {
-                Errors.Add("missing path");
-            }
-            if (request.Date == null)
-            {
-                Errors.Add("missing date");
-                if (request.Date > 0)
-                {
-                    Errors.Add("illegal date");
-                }
-            }
-
+            //Method
+            if (string.IsNullOrEmpty(request.Method)) Errors.Add("missing method");
+            else if (!acceptedM.Contains(request.Method)) Errors.Add("illegal method");
 
             if (request.Method != "read")
             {
@@ -61,6 +41,14 @@ namespace Assignment3
                     Errors.Add("missing body");
                 }
             }
+
+            //Path
+            if (string.IsNullOrEmpty(request.Path)) Errors.Add("missing path");
+
+            //Date
+            if (request.Date == null) Errors.Add("missing date");
+            else if (long.Parse(request.Date) < 0) Errors.Add("illegal date");
+
 
             if (Errors.Count > 0)
             {

@@ -3,17 +3,16 @@ using System.Linq;
 
 namespace Assignment3
 {
-    #nullable enable
+#nullable enable
     public class Category
     {
-
-        public int cid { get; set; }
-        public string name { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
 
         public Category(int cid, string name)
         {
-            this.cid = cid;
-            this.name = name;
+            this.Id = cid;
+            this.Name = name;
         }
     }
 
@@ -28,16 +27,16 @@ namespace Assignment3
 
         public Category? GetCategory(int cid)
         {
-            return categories.FirstOrDefault(c => c.cid == cid);
+            return categories.FirstOrDefault(c => c.Id == cid);
         }
 
         public bool UpdateCategory(int id, string newName)
         {
-            Category? category = categories.FirstOrDefault(c => c.cid == id);
+            Category? category = categories.FirstOrDefault(c => c.Id == id);
 
             if (category != null)
             {
-                category.name = newName;
+                category.Name = newName;
                 return true;
             }
             return false;
@@ -45,7 +44,7 @@ namespace Assignment3
 
         public bool DeleteCategory(int id)
         {
-            Category? category = categories.FirstOrDefault(c => c.cid == id);
+            Category? category = categories.FirstOrDefault(c => c.Id == id);
             if (category != null)
             {
                 categories.Remove(category);
@@ -57,7 +56,7 @@ namespace Assignment3
 
         public bool CreateCategory(int id, string name)
         {
-            Category? category = categories.FirstOrDefault(c => c.cid == id);
+            Category? category = categories.FirstOrDefault(c => c.Id == id);
             if (category == null)
             {
                 categories.Add(new Category(id, name));

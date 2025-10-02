@@ -21,5 +21,5 @@ namespace Assignment3
         public string? Body { get; set; } = null;
     }
 
-    
+
 }

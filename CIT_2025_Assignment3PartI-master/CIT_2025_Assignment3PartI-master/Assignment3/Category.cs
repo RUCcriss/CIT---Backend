@@ -17,10 +17,17 @@ namespace Assignment3
 
     public class CategoryService
     {
-        private List<Category> categories = new List<Category>();
+        // initialize list with provided categories
+        private List<Category> categories = new List<Category>
+        {
+            new Category(1, "Beverages"),
+            new Category(2, "Condiments"),
+            new Category(3, "Confections")
+        };
 
         public List<Category> GetCategories()
         {
+            //Returns copy to not expose list. Private only limits visibility via CatService.categories
             return new List<Category>(categories);
         }
 

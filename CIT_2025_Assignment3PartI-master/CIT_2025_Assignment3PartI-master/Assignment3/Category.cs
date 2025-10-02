@@ -3,8 +3,10 @@ using System.Linq;
 
 namespace Assignment3
 {
+    #nullable enable
     public class Category
     {
+
         public int cid { get; set; }
         public string name { get; set; }
 

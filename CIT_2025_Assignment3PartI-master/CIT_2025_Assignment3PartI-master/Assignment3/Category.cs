@@ -3,7 +3,6 @@ using System.Linq;
 
 namespace Assignment3
 {
-#nullable enable
     public class Category
     {
         public int Id { get; set; }

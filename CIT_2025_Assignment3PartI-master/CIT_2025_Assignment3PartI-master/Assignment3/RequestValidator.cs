@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Text.Json;
 
 namespace Assignment3
 {
@@ -39,6 +40,16 @@ namespace Assignment3
                 if (string.IsNullOrEmpty(request.Body))
                 {
                     Errors.Add("missing body");
+                } else
+                {
+                    try
+                    {
+                        JsonDocument.Parse(request.Body);
+                    }
+                    catch (JsonException)
+                    {
+                        Errors.Add("illegal body");
+                    }
                 }
             }
 
@@ -48,6 +59,7 @@ namespace Assignment3
             //Date
             if (request.Date == null) Errors.Add("missing date");
             else if (long.Parse(request.Date) < 0) Errors.Add("illegal date");
+
 
 
             if (Errors.Count > 0)

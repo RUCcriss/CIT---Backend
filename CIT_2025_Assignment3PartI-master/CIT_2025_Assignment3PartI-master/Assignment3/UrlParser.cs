@@ -22,27 +22,22 @@ namespace Assignment3
         {
             string[] strings = url.Split('/');
 
-            if (!string.IsNullOrEmpty(url))
+
+            if (int.TryParse(strings[strings.Length - 1], out int temp))
             {
-                if (int.TryParse(strings[strings.Length - 1], out int id))
-                {
-                    this.HasId = true;
-                    this.Id = strings[strings.Length - 1];
-                    this.Path = string.Join("/", strings.Take(strings.Count() - 1));
-                    return true;
-                }
-                else
-                {
-                    this.HasId = false;
-                    this.Id = string.Empty;
-                    this.Path = url;
-                }
+                this.HasId = true;
+                this.Id = strings[strings.Length - 1];
+                this.Path = string.Join("/", strings.Take(strings.Count() - 1));
                 return true;
             }
             else
             {
-                return false;
+                this.HasId = false;
+                this.Id = string.Empty;
+                this.Path = url;
             }
+            return true;
         }
+
     }
 }

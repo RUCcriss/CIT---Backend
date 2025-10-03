@@ -49,7 +49,7 @@ namespace Assignment3
             if (request.Date == null) Errors.Add("missing date");
             else if (long.Parse(request.Date) < 0) Errors.Add("illegal date");
 
-
+            //Return response
             if (Errors.Count > 0)
             {
                 return new Response

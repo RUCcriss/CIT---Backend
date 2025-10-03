@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Text.Json;
 
 namespace Assignment3
 {
@@ -11,9 +12,8 @@ namespace Assignment3
     {
         public string? Method { get; set; }
         public string? Path { get; set; }
-        public long? Date { get; set; }
+        public string? Date { get; set; }
         public string? Body { get; set; }
-
     }
 
     //respone klasse
@@ -27,41 +27,52 @@ namespace Assignment3
     {
         private List<string> acceptedM = new List<string> { "read", "create", "echo", "delete", "update" };
 
-        public Response ValidReq(Request request)
+        public Response ValidateRequest(Request request)
         {
             List<string> Errors = new List<string>();
 
-            if (string.IsNullOrEmpty(request.Method))
-            {
-                Errors.Add("missing method");
-            }
-            else if (!acceptedM.Contains(request.Method))
-            {
-                Errors.Add("illegal method");
-            }
+            //Method
+            if (string.IsNullOrEmpty(request.Method)) Errors.Add("missing method");
+            else if (!acceptedM.Contains(request.Method)) Errors.Add("illegal method");
 
-            if (string.IsNullOrEmpty(request.Path))
-            {
-                Errors.Add("missing path");
-            }
-            if (request.Date == null)
-            {
-                Errors.Add("missing date");
-                if (request.Date > 0)
-                {
-                    Errors.Add("illegal date");
-                }
-            }
-
-
-            if (request.Method != "read")
+            if (request.Method != "read") // WARN: although there is no test for it, it should be pointed out that method = "read" should then have no body
             {
                 if (string.IsNullOrEmpty(request.Body))
                 {
                     Errors.Add("missing body");
+                    // In cases of method = `create` or `update`
                 }
+                else if (request.Method == "create" || request.Method == "update")
+                {
+
+                    try
+                    {
+                        JsonDocument.Parse(request.Body);
+                    }
+                    catch (JsonException)
+                    {
+                        Errors.Add("illegal body");
+                    }
+                }
+                else if (request.Method == "echo")
+                { // if instead echo
+                  //Should not be a problem. although we might want to check that it is a string (somehow?)
+                }
+
             }
 
+            //Path
+            if (string.IsNullOrEmpty(request.Path)) Errors.Add("missing path");
+
+            //Date
+            long dateValue; //needed for TryParse
+            if (request.Date == null) Errors.Add("missing date");
+            else if (!long.TryParse(request.Date, out dateValue)) Errors.Add("illegal date"); //Cant parse from string
+            else if (long.Parse(request.Date) < 0) Errors.Add("illegal date");
+
+            //Body
+
+            //Return response
             if (Errors.Count > 0)
             {
                 return new Response

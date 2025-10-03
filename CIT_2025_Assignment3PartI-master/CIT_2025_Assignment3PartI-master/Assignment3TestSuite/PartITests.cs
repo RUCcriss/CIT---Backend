@@ -22,7 +22,7 @@ public class PartITests
     /// Testing UrlParser class
     ///
     ////////////////////////////////////////////////////////// 
-    /*
+
     [Fact]
     public void UrlParser_ValidUrlWithoutId_ShouldParseCorrectly()
     {
@@ -51,7 +51,7 @@ public class PartITests
         Assert.Equal("5", urlParser.Id);
         Assert.Equal("/api/categories", urlParser.Path);
     }
-    */
+
     //////////////////////////////////////////////////////////
     /// 
     /// Testing RequestValidator class

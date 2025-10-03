@@ -1,3 +1,7 @@
+using System;
+using System.Linq;
+
+
 namespace Assignment3
 {
 
@@ -14,9 +18,31 @@ namespace Assignment3
             Path = string.Empty;
         }
 
-        public static bool ParseUrl(string url)
+        public bool ParseUrl(string url)
         {
-            return true;
+            string[] strings = url.Split('/');
+
+            if (!string.IsNullOrEmpty(url))
+            {
+                if (int.TryParse(strings[strings.Length - 1], out int id))
+                {
+                    this.HasId = true;
+                    this.Id = strings[strings.Length - 1];
+                    this.Path = string.Join("/", strings.Take(strings.Count() - 1));
+                    return true;
+                }
+                else
+                {
+                    this.HasId = false;
+                    this.Id = string.Empty;
+                    this.Path = url;
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

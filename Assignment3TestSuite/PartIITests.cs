@@ -43,8 +43,6 @@ public class PartIITests
         Assert.True(client.Connected);
     }
 
-    /*
-
     [Fact]
     public void Constraint_RequestWithInvalidPath_ShouldReturnNotFound()
     {
@@ -65,6 +63,7 @@ public class PartIITests
         Assert.Equal(expectedResponse.ToJson().ToLower(), response.ToJson().ToLower());
     }
 
+    /*
     [Fact]
     public void Constraint_RequestWithUnknownMethod_ShouldReturnIllegalMethod()
     {

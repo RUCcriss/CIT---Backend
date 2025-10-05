@@ -1,6 +1,7 @@
-using System.Net.Sockets;
-using System.Net;
 using System;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Text;
 using Utility;
@@ -32,7 +33,8 @@ namespace Server
 
         private static void HandleClient(TcpClient client)
         {
-            var stream = client.GetStream();
+            NetworkStream stream = client.GetStream();
+            Console.WriteLine(stream);
 
             var msg = "Hello from server";
             byte[] data = Encoding.UTF8.GetBytes(msg);

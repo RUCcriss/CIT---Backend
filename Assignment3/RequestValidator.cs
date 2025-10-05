@@ -5,7 +5,6 @@ using System.Text.Json;
 
 namespace Assignment3
 {
-
     //request klasse
     public class Request
     {

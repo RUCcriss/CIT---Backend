@@ -32,7 +32,7 @@ namespace Utility
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"parseStreamToRequest caught an Exception: {ex.Message}"); //.Message as just ex is quite verbose
+                Console.WriteLine($"parseStreamToString caught an Exception: {ex.Message}"); //.Message as just ex is quite verbose
                 return String.Empty;
             }
         }

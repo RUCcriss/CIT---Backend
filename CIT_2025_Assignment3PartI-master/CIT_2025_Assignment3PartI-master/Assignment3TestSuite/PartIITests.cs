@@ -595,8 +595,6 @@ public class PartIITests
      *
      **********************************************************/
 
-    /*
-
     private static string UnixTimestamp()
     {
         return DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
@@ -649,6 +647,4 @@ public static class Util
             return JsonSerializer.Deserialize<Response>(responseData, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
         }
     }
-
-    */
 }

@@ -35,7 +35,7 @@ public class PartIITests
     /// Testing request constraints
     /// 
     ////////////////////////////////////////////////////////// 
-    /*
+
     [Fact]
     public void Constraint_ConnectionWithoutRequest_ShouldConnect()
     {
@@ -43,6 +43,7 @@ public class PartIITests
         Assert.True(client.Connected);
     }
 
+    /*
 
     [Fact]
     public void Constraint_RequestWithInvalidPath_ShouldReturnNotFound()

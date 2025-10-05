@@ -63,7 +63,6 @@ public class PartIITests
         Assert.Equal(expectedResponse.ToJson().ToLower(), response.ToJson().ToLower());
     }
 
-    /*
     [Fact]
     public void Constraint_RequestWithUnknownMethod_ShouldReturnIllegalMethod()
     {
@@ -83,6 +82,7 @@ public class PartIITests
         Assert.Contains("illegal method", response.Status.ToLower());
     }
 
+    /*
     [Theory]
     [InlineData("create")]
     [InlineData("read")]

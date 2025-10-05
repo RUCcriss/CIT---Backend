@@ -15,18 +15,42 @@ namespace Utility
     {
         public static string ParseStreamToString(NetworkStream stream)
         {
-            byte[] resp = new byte[2048];
-            using (var memStream = new MemoryStream())
+            try
             {
-                int bytesread = 0;
-                do
+                byte[] resp = new byte[2048];
+                using (var memStream = new MemoryStream())
                 {
-                    bytesread = stream.Read(resp, 0, resp.Length);
-                    memStream.Write(resp, 0, bytesread);
+                    int bytesread = 0;
+                    do
+                    {
+                        bytesread = stream.Read(resp, 0, resp.Length);
+                        memStream.Write(resp, 0, bytesread);
 
-                } while (bytesread == 2048);
+                    } while (bytesread == 2048);
+                    return Encoding.UTF8.GetString(memStream.ToArray());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"parseStreamToRequest caught an Exception: {ex.Message}"); //.Message as just ex is quite verbose
+                return String.Empty;
+            }
+        }
 
-                return Encoding.UTF8.GetString(memStream.ToArray());
+        public static Request parseStreamToRequest(NetworkStream stream)
+        {
+            try
+            {
+                string reqString = ParseStreamToString(stream);
+                if (String.IsNullOrEmpty(reqString)) return new Request();
+                Request? request = JsonSerializer.Deserialize<Request>(reqString, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+                if (request == null) return new Request();
+                return request;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"parseStreamToRequest caught an Exception: {ex.Message}"); //.Message as just ex is quite verbose
+                return new Request();
             }
         }
     }

@@ -36,11 +36,16 @@ namespace Server
             try
             {
                 NetworkStream stream = client.GetStream();
-                Console.WriteLine(Util.ParseStreamToString(stream));
+                Request request = Util.parseStreamToRequest(stream);
+                Console.WriteLine(request.Method);
             }
             catch (IOException ex)
             {
                 Console.WriteLine($"HandleClient caught an IOException: {ex.Message}"); //.Message as just ex is quite verbose
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"HandleClient caught an Exception: {ex.Message}"); //.Message as just ex is quite verbose
             }
             finally
             {

@@ -1,6 +1,8 @@
 using System.Net.Sockets;
 using System.Net;
 using System;
+using System.Threading;
+using System.Text;
 
 namespace Server
 {
@@ -21,10 +23,21 @@ namespace Server
             {
                 TcpClient client = server.AcceptTcpClient();
                 Console.WriteLine("Client connected");
-                //HandleClient(client); // FIX: add multithreaded handler thingy
+
+                Thread clientThread = new Thread(() => HandleClient(client));
+                clientThread.Start();
             }
+        }
+
+        private static void HandleClient(TcpClient client)
+        {
+            var stream = client.GetStream();
+
+            var msg = "Hello from server";
+            byte[] data = Encoding.UTF8.GetBytes(msg);
+            stream.Write(data, 0, data.Length);
+
+            client.Close();
         }
     }
 }
-
-

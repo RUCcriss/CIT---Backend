@@ -37,7 +37,18 @@ namespace Server
             {
                 NetworkStream stream = client.GetStream();
                 Request request = Util.parseStreamToRequest(stream);
-                Console.WriteLine(request.Method);
+                RequestValidator requestValidator = new RequestValidator();
+                Response validatorResponse = requestValidator.ValidateRequest(request);
+                if (validatorResponse.Status != "1 OK")
+                {
+                    // Så kan vi svare med response direkte
+                    Util.sendResponse(validatorResponse, client);
+                }
+                else
+                {
+                    //Ellers behandler vi requesten
+                    Console.WriteLine(validatorResponse.Status);
+                }
             }
             catch (IOException ex)
             {

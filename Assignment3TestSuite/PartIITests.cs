@@ -82,7 +82,6 @@ public class PartIITests
         Assert.Contains("illegal method", response.Status.ToLower());
     }
 
-    /*
     [Theory]
     [InlineData("create")]
     [InlineData("read")]
@@ -104,11 +103,8 @@ public class PartIITests
 
         Assert.Contains("missing path", response.Status.ToLower());
     }
-    */
 
     /* Date Tests    */
-
-    /*
 
     [Fact]
     public void Constraint_RequestWithoutDate_ShouldReturnMissingDate()
@@ -141,11 +137,7 @@ public class PartIITests
         Assert.Contains("illegal date", response.Status.ToLower());
     }
 
-    */
-
     /* Body Tests    */
-
-    /*
 
     [Theory]
     [InlineData("create")]
@@ -190,11 +182,7 @@ public class PartIITests
 
     }
 
-    */
-
     /* Echo Test */
-
-    /*
 
     [Fact]
     public void Echo_RequestWithBody_ShouldReturnBody()
@@ -215,8 +203,6 @@ public class PartIITests
 
     }
 
-    */
-
     //////////////////////////////////////////////////////////
     /// 
     /// Testing API 
@@ -224,8 +210,6 @@ public class PartIITests
     ////////////////////////////////////////////////////////// 
 
     /* Path tests  */
-
-    /*
 
     [Fact]
     public void Constraint_RequestWithInvalidPathId_ShouldReturnBadRequest()
@@ -309,11 +293,7 @@ public class PartIITests
         Assert.Equal(expectedResponse.ToJson().ToLower(), response.ToJson().ToLower());
     }
 
-    */
-
     /* Read tests */
-
-    /*
 
     [Fact]
     public void Request_ReadCategories_ShouldReturnOkAndListOfCategoriesInBody()
@@ -388,11 +368,7 @@ public class PartIITests
         Assert.Contains("5 not found", response.Status.ToLower());
     }
 
-    */
-
     /* Update tests  */
-
-    /*
 
     [Fact]
     public void Request_UpdateCategoryWithValidIdAndBody_ShouldReturnUpdated()
@@ -493,11 +469,7 @@ public class PartIITests
         Assert.Contains("5 not found", response.Status.ToLower());
     }
 
-    */
-
     /* Create Tests  */
-
-    /*
 
     [Fact]
     public void Request_CreateCategoryWithValidBodyArgument_ShouldCreateNewCategory()
@@ -534,11 +506,7 @@ public class PartIITests
         client.ReadResponse();
     }
 
-    */
-
     /* Delete Tests  */
-
-    /*
 
     [Fact]
     public void Request_DeleteCategoryWithValidId_ShouldRemoveCategory()
@@ -586,8 +554,6 @@ public class PartIITests
 
         Assert.Contains("5 not found", response.Status.ToLower());
     }
-
-    */
 
     /**********************************************************
      *

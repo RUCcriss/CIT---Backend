@@ -40,7 +40,7 @@ namespace Server
             }
             catch (IOException ex)
             {
-                Console.WriteLine($"HandleClient caught an IOException: {ex}");
+                Console.WriteLine($"HandleClient caught an IOException: {ex.Message}"); //.Message as just ex is quite verbose
             }
             finally
             {

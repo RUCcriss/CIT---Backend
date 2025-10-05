@@ -61,6 +61,8 @@ namespace Assignment3
 
             }
 
+            // WARN: Be aware that the delete method is not handled at all, since the protocol documentation does not seem to specify how delete is to be handled yet.
+
             //Path
             if (string.IsNullOrEmpty(request.Path)) Errors.Add("missing path");
 
@@ -68,7 +70,7 @@ namespace Assignment3
             long dateValue; //needed for TryParse
             if (request.Date == null) Errors.Add("missing date");
             else if (!long.TryParse(request.Date, out dateValue)) Errors.Add("illegal date"); //Cant parse from string
-            else if (long.Parse(request.Date) < 0) Errors.Add("illegal date");
+            else if (long.Parse(request.Date) < 0) Errors.Add("illegal date"); //UNIX time does not go negative
 
             //Body
 

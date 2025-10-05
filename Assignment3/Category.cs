@@ -27,7 +27,7 @@ namespace Assignment3
 
         public List<Category> GetCategories()
         {
-            //Returns copy to not expose list. Private only limits visibility via CatService.categories
+            //Returns copy to not expose list. Private only limits visibility via CategoryService.categories
             return new List<Category>(categories);
         }
 

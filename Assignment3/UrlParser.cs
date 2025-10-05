@@ -22,7 +22,7 @@ namespace Assignment3
         {
             string[] strings = url.Split('/');
 
-
+            //If final part after '/' in url parses as string, we assume its an id
             if (int.TryParse(strings[strings.Length - 1], out int temp))
             {
                 this.HasId = true;
@@ -30,7 +30,7 @@ namespace Assignment3
                 this.Path = string.Join("/", strings.Take(strings.Count() - 1));
                 return true;
             }
-            else
+            else //otherwise, the whole url is purely path
             {
                 this.HasId = false;
                 this.Id = string.Empty;

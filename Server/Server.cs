@@ -33,9 +33,19 @@ namespace Server
 
         private static void HandleClient(TcpClient client)
         {
-            NetworkStream stream = client.GetStream();
-            Console.WriteLine(Util.ParseStreamToString(stream));
-            client.Close();
+            try
+            {
+                NetworkStream stream = client.GetStream();
+                Console.WriteLine(Util.ParseStreamToString(stream));
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"HandleClient caught an IOException: {ex}");
+            }
+            finally
+            {
+                client.Close();
+            }
         }
 
     }

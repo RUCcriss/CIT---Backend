@@ -38,7 +38,7 @@ namespace Assignment3
 
         public bool UpdateCategory(int id, string newName)
         {
-            Category? category = categories.FirstOrDefault(c => c.Id == id);
+            Category? category = GetCategory(id);
 
             if (category != null)
             {

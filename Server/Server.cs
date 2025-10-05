@@ -34,13 +34,25 @@ namespace Server
         private static void HandleClient(TcpClient client)
         {
             NetworkStream stream = client.GetStream();
-            Console.WriteLine(stream);
-
-            var msg = "Hello from server";
-            byte[] data = Encoding.UTF8.GetBytes(msg);
-            stream.Write(data, 0, data.Length);
-
+            Console.WriteLine(parseStreamToString(stream));
             client.Close();
+        }
+
+        private static string parseStreamToString(NetworkStream stream)
+        {
+            byte[] resp = new byte[2048];
+            using (var memStream = new MemoryStream())
+            {
+                int bytesread = 0;
+                do
+                {
+                    bytesread = stream.Read(resp, 0, resp.Length);
+                    memStream.Write(resp, 0, bytesread);
+
+                } while (bytesread == 2048);
+
+                return Encoding.UTF8.GetString(memStream.ToArray());
+            }
         }
     }
 }

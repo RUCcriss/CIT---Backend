@@ -38,7 +38,7 @@ namespace Assignment3
 
         public bool UpdateCategory(int id, string newName)
         {
-            Category? category = categories.FirstOrDefault(c => c.Id == id);
+            Category? category = GetCategory(id);
 
             if (category != null)
             {
@@ -51,13 +51,7 @@ namespace Assignment3
         public bool DeleteCategory(int id)
         {
             Category? category = categories.FirstOrDefault(c => c.Id == id);
-            if (category != null)
-            {
-                categories.Remove(category);
-                return true;
-            }
-
-            return false;
+            return category != null && categories.Remove(category);
         }
 
         public bool CreateCategory(int id, string name)

@@ -19,3 +19,11 @@ Both are run from the CLI via the following (server as example):
 ```console
 dotnet run --project Server
 ```
+
+### Dependencies
+
+Adding our utility project as a dependency for the server project was done via the following:
+
+```console
+dotnet add Server/Server.csproj reference Utility/Util.csproj
+```

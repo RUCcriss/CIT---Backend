@@ -41,12 +41,12 @@ namespace Server
                 Response validatorResponse = requestValidator.ValidateRequest(request);
                 if (validatorResponse.Status != "1 OK")
                 {
-                    // Så kan vi svare med response direkte
+                    // Da requestValidator.ValidateRequest() returnerer fejlkoder for malforme requests, kan vi som udgangspunkt blot sende fejlkoderne direkte tilbage til client.
                     Util.sendResponse(validatorResponse, client);
                 }
                 else
                 {
-                    //Ellers behandler vi requesten
+                    //Ellers bør requesten behandles, idet ValidateRequest() blot returnerer "1 OK" hvis requesten valideres. (det er jo ikke det rette at returnere til clienten. så vi skal lave en anden response når request behandles)
                     Console.WriteLine(validatorResponse.Status);
                 }
             }

@@ -88,6 +88,8 @@ namespace Utility
 
         private static bool hasJsonBody(string? body)
         {
+            if (body == null) return false; //to get rid of possible null reference warning (warning CS8604)
+
             try
             {
                 JsonDocument.Parse(body);

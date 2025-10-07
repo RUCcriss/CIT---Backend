@@ -57,6 +57,7 @@ namespace Utility
         public static void sendResponse(Response response, TcpClient client)
         {
             var msg = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(response, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+            Console.WriteLine($"writing response: {JsonSerializer.Serialize(response, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })}");
             client.GetStream().Write(msg, 0, msg.Length);
         }
     }

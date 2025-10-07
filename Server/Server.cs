@@ -38,7 +38,8 @@ namespace Server
                 NetworkStream stream = client.GetStream();
                 Request request = Util.parseStreamToRequest(stream);
                 RequestValidator requestValidator = new RequestValidator();
-                Response validatorResponse = requestValidator.ValidateRequest(request);
+                UrlParser urlParser = new UrlParser();
+                Response validatorResponse = requestValidator.ValidateRequest(request, urlParser);
                 if (validatorResponse.Status != "1 Ok")
                 {
                     // Da requestValidator.ValidateRequest() returnerer fejlkoder for malforme requests, kan vi som udgangspunkt blot sende fejlkoderne direkte tilbage til client.
@@ -48,7 +49,29 @@ namespace Server
                 {
                     //Ellers bør requesten behandles, idet ValidateRequest() blot returnerer "1 OK" hvis requesten valideres. (det er jo ikke det rette at returnere til clienten. så vi skal lave en anden response når request behandles)
                     Console.WriteLine(validatorResponse.Status);
-                    Util.sendResponse(new Response() { Status = "6 Error" }, client);
+                    CategoryService categoryService = new CategoryService(); // WARN: potentially, it should not be initialized for each thread. But depends on how the specification is read
+
+                    //switch for different methods
+                    switch (request.Method)
+                    {
+                        case "create":
+                            break;
+                        case "read":
+                            break;
+                        case "update":
+                            break;
+                        case "delete":
+                            break;
+                        case "echo":
+                            Console.WriteLine(request.Body);
+                            Util.sendResponse(new Response() { Status = "1 Ok", Body = request.Body }, client);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    //Placeholder response
+                    Util.sendResponse(new Response() { Status = "6 Error", Body = null }, client);
                 }
             }
             catch (IOException ex)

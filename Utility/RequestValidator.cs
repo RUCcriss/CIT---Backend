@@ -25,7 +25,7 @@ namespace Utility
     {
         private List<string> acceptedM = new List<string> { "read", "create", "echo", "delete", "update" };
 
-        public Response ValidateRequest(Request request)
+        public Response ValidateRequest(Request request, UrlParser urlParser)
         {
             List<string> Errors = new List<string>();
 
@@ -39,10 +39,9 @@ namespace Utility
             else if (long.Parse(request.Date) < 0) Errors.Add("illegal date"); //UNIX time does not go negative
 
             //CRUD might as well start with parseUrl
-            if (string.IsNullOrEmpty(request.Path)) Errors.Add("missing path");
-            UrlParser urlParser = new UrlParser();
+            if (string.IsNullOrEmpty(request.Path) && request.Method != "echo") Errors.Add("missing path");
             bool parseResult = urlParser.ParseUrl(request.Path);
-            if (!parseResult) Errors.Add("bad request");
+            if (!parseResult && request.Method != "echo") Errors.Add("bad request");
 
             switch (request.Method)
             {

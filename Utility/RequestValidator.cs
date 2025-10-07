@@ -29,40 +29,9 @@ namespace Utility
         {
             List<string> Errors = new List<string>();
 
-            //Method
+            //Check if method is missing or echo --> else do validation of crud request
             if (string.IsNullOrEmpty(request.Method)) Errors.Add("missing method");
-            else if (!acceptedM.Contains(request.Method)) Errors.Add("illegal method");
-
-            if (request.Method != "read") // WARN: although there is no test for it, it should be pointed out that method = "read" should then have no body
-            {
-                if (string.IsNullOrEmpty(request.Body))
-                {
-                    Errors.Add("missing body");
-                    // In cases of method = `create` or `update`
-                }
-                else if (request.Method == "create" || request.Method == "update")
-                {
-
-                    try
-                    {
-                        JsonDocument.Parse(request.Body);
-                    }
-                    catch (JsonException)
-                    {
-                        Errors.Add("illegal body");
-                    }
-                }
-                else if (request.Method == "echo")
-                { // if instead echo
-                  //Should not be a problem. although we might want to check that it is a string (somehow?)
-                }
-
-            }
-
-            // WARN: Be aware that the delete method is not handled at all, since the protocol documentation does not seem to specify how delete is to be handled yet.
-
-            //Path
-            if (string.IsNullOrEmpty(request.Path)) Errors.Add("missing path");
+            else if (request.Method == "echo") goto returnOk; //echo has no relevant checks in validation
 
             //Date
             long dateValue; //needed for TryParse
@@ -70,7 +39,34 @@ namespace Utility
             else if (!long.TryParse(request.Date, out dateValue)) Errors.Add("illegal date"); //Cant parse from string
             else if (long.Parse(request.Date) < 0) Errors.Add("illegal date"); //UNIX time does not go negative
 
-            //Body
+            //CRUD might as well start with parseUrl
+            if (string.IsNullOrEmpty(request.Path)) Errors.Add("missing path");
+            UrlParser urlParser = new UrlParser();
+            bool parseResult = urlParser.ParseUrl(request.Path);
+            if (!parseResult) Errors.Add("bad request");
+
+            switch (request.Method)
+            {
+                case "create":
+                    if (!parseResult) Errors.Add("bad request");
+                    if (urlParser.HasId) Errors.Add("bad request");
+                    if (string.IsNullOrEmpty(request.Body)) Errors.Add("missing body");
+                    if (!hasJsonBody(request.Body)) Errors.Add("illegal body");
+                    break;
+                case "read":
+                    break;
+                case "update":
+                    if (!parseResult) Errors.Add("bad request");
+                    if (!urlParser.HasId) Errors.Add("bad request");
+                    if (string.IsNullOrEmpty(request.Body)) Errors.Add("missing body");
+                    if (!hasJsonBody(request.Body)) Errors.Add("illegal body");
+                    break;
+                case "delete":
+                    break;
+                default:
+                    Errors.Add("illegal method");
+                    break;
+            }
 
             //Return response
             if (Errors.Count > 0)
@@ -81,11 +77,27 @@ namespace Utility
                     Body = null
                 };
             }
+
+        //In case no errors, we can return "1 OK"
+        returnOk: //label for jumping to via goto
             return new Response
             {
                 Status = "1 Ok",
                 Body = null
             };
+        }
+
+        private static bool hasJsonBody(string? body)
+        {
+            try
+            {
+                JsonDocument.Parse(body);
+                return true;
+            }
+            catch (JsonException)
+            {
+                return false;
+            }
         }
     }
 }

@@ -65,9 +65,9 @@ namespace Server
                         case "read":
                             break;
                         case "update":
-                            var dataToUpdate = request.Body.FromJson<Dictionary<string, string>>();
-                            Console.WriteLine($"Got category: {dataToUpdate.ToString()}");
-                            if (urlParser.Id == dataToUpdate["cid"] && categoryService.UpdateCategory(int.Parse(urlParser.Id), dataToUpdate["name"]))
+                            Category dataToUpdate = request.Body.FromJson<Category>();
+                            Console.WriteLine($"Got category: {dataToUpdate.Name}");
+                            if (int.Parse(urlParser.Id) == dataToUpdate.Id && categoryService.UpdateCategory(int.Parse(urlParser.Id), dataToUpdate.Name))
                             {
                                 Util.sendResponse(new Response() { Status = "3 Updated" }, client);
                             }

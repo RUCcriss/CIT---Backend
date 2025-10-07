@@ -63,6 +63,22 @@ namespace Server
                             Util.sendResponse(new Response() { Status = "2 Created", Body = (new { Cid = idAdded, Name = data["name"] }).ToJson() }, client);
                             break;
                         case "read":
+                            if (urlParser.HasId)
+                            {
+                                var category = categoryService.GetCategory(int.Parse(urlParser.Id));
+                                if (category == null)
+                                {
+                                    Util.sendResponse(new Response() { Status = "5 Not Found" }, client);
+                                }
+                                else
+                                {
+                                    Util.sendResponse(new Response() { Status = "1 Ok", Body = category.ToJson() }, client);
+                                }
+                            }
+                            else
+                            {
+                                Util.sendResponse(new Response() { Status = "1 Ok", Body = categoryService.GetCategories().ToJson() }, client);
+                            }
                             break;
                         case "update":
                             Category dataToUpdate = request.Body.FromJson<Category>();

@@ -43,6 +43,8 @@ namespace Utility
             {
                 string reqString = ParseStreamToString(stream);
                 if (String.IsNullOrEmpty(reqString)) return new Request();
+
+                //Hvorfor kan request blive NULL når reqString allerede er blevet tjekket om den er NULL? - Jeppe
                 Request? request = JsonSerializer.Deserialize<Request>(reqString, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
                 if (request == null) return new Request();
                 return request;

@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace Utility
 {
     public class Category
     {
+        [JsonPropertyName("cid")]
         public int Id { get; set; }
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         public Category(int cid, string name)
@@ -17,6 +20,7 @@ namespace Utility
 
     public class CategoryService
     {
+        private int nextId = 4;
         // initialize list with provided categories
         private List<Category> categories = new List<Category>
         {
@@ -52,6 +56,13 @@ namespace Utility
         {
             Category? category = categories.FirstOrDefault(c => c.Id == id);
             return category != null && categories.Remove(category);
+        }
+
+        public int CreateCategory(string name)
+        {
+            int idChosen = nextId++;
+            categories.Add(new Category(idChosen, name));
+            return idChosen;
         }
 
         public bool CreateCategory(int id, string name)

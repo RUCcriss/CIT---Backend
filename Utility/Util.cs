@@ -56,9 +56,26 @@ namespace Utility
 
         public static void sendResponse(Response response, TcpClient client)
         {
-            var msg = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(response, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
-            Console.WriteLine($"writing response: {JsonSerializer.Serialize(response, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })}");
+            Console.WriteLine($"writing response: {response.ToJson()}");
+            var msg = Encoding.UTF8.GetBytes(response.ToJson());
             client.GetStream().Write(msg, 0, msg.Length);
+        }
+
+        public static string ToJson(this object data)
+        {
+            return JsonSerializer.Serialize(data, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        }
+
+        public static T FromJson<T>(this string element)
+        {
+            Console.WriteLine($"Parsing object from: {element}");
+            return JsonSerializer.Deserialize<T>(element, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        }
+
+        public static object FromJson(this string element)
+        {
+            Console.WriteLine($"Parsing object from: {element}");
+            return JsonSerializer.Deserialize<object>(element, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
+using System.Collections.Generic;
 using Utility;
 
 namespace Server
@@ -11,9 +12,11 @@ namespace Server
     public class Server
     {
         TcpListener server;
+        CategoryService categoryService;
 
         public Server(int port)
         {
+            this.categoryService = new CategoryService();
             this.server = new TcpListener(IPAddress.Loopback, port);
             server.Start(); //starts the listener
             Console.WriteLine($"Server started on port {port}");
@@ -26,12 +29,12 @@ namespace Server
                 TcpClient client = server.AcceptTcpClient();
                 Console.WriteLine("Client connected");
 
-                Thread clientThread = new Thread(() => HandleClient(client));
+                Thread clientThread = new Thread(() => HandleClient(client, categoryService));
                 clientThread.Start();
             }
         }
 
-        private static void HandleClient(TcpClient client)
+        private static void HandleClient(TcpClient client, CategoryService categoryService)
         {
             try
             {
@@ -49,18 +52,29 @@ namespace Server
                 {
                     //Ellers bør requesten behandles, idet ValidateRequest() blot returnerer "1 OK" hvis requesten valideres. (det er jo ikke det rette at returnere til clienten. så vi skal lave en anden response når request behandles)
                     Console.WriteLine(validatorResponse.Status);
-                    CategoryService categoryService = new CategoryService(); // WARN: potentially, it should not be initialized for each thread. But depends on how the specification is read
 
                     //switch for different methods
                     switch (request.Method)
                     {
                         case "create":
+                            var data = request.Body.FromJson<Dictionary<string, string>>();
+                            Console.WriteLine($"Got category: {data["name"]}");
+                            int idAdded = categoryService.CreateCategory(data["name"]); // WARN: Assumes this cannot fail
+                            Util.sendResponse(new Response() { Status = "2 Created", Body = (new { cid = idAdded, name = data["name"] }).ToJson() }, client);
                             break;
                         case "read":
                             break;
                         case "update":
                             break;
                         case "delete":
+                            if (categoryService.DeleteCategory(int.Parse(urlParser.Id)))
+                            {
+                                Util.sendResponse(new Response() { Status = "1 Ok" }, client);
+                            }
+                            else
+                            {
+                                Util.sendResponse(new Response() { Status = "5 Not Found" }, client);
+                            }
                             break;
                         case "echo":
                             Console.WriteLine(request.Body);

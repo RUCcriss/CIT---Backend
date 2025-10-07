@@ -53,6 +53,12 @@ namespace Server
                     //Ellers bør requesten behandles, idet ValidateRequest() blot returnerer "1 OK" hvis requesten valideres. (det er jo ikke det rette at returnere til clienten. så vi skal lave en anden response når request behandles)
                     Console.WriteLine(validatorResponse.Status);
 
+                    //Check path with special case for echo which does not require it
+                    if (request.Method != "echo" && urlParser.Path != "/api/categories")
+                    {
+                        Util.sendResponse(new Response() { Status = "5 Not Found" }, client);
+                    }
+
                     //switch for different methods
                     switch (request.Method)
                     {

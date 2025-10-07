@@ -48,7 +48,6 @@ namespace Utility
             switch (request.Method)
             {
                 case "create":
-                    if (!parseResult) Errors.Add("bad request");
                     if (urlParser.HasId) Errors.Add("bad request");
                     if (string.IsNullOrEmpty(request.Body)) Errors.Add("missing body");
                     if (!hasJsonBody(request.Body)) Errors.Add("illegal body");
@@ -56,12 +55,12 @@ namespace Utility
                 case "read":
                     break;
                 case "update":
-                    if (!parseResult) Errors.Add("bad request");
                     if (!urlParser.HasId) Errors.Add("bad request");
                     if (string.IsNullOrEmpty(request.Body)) Errors.Add("missing body");
                     if (!hasJsonBody(request.Body)) Errors.Add("illegal body");
                     break;
                 case "delete":
+                    if (!urlParser.HasId) Errors.Add("bad request");
                     break;
                 default:
                     Errors.Add("illegal method");
@@ -94,7 +93,7 @@ namespace Utility
                 JsonDocument.Parse(body);
                 return true;
             }
-            catch (JsonException)
+            catch (Exception)
             {
                 return false;
             }

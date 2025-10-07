@@ -48,15 +48,16 @@ namespace Server
                 {
                     //Ellers bør requesten behandles, idet ValidateRequest() blot returnerer "1 OK" hvis requesten valideres. (det er jo ikke det rette at returnere til clienten. så vi skal lave en anden response når request behandles)
                     Console.WriteLine(validatorResponse.Status);
+                    Util.sendResponse(new Response { Status = "6 Error" }, client);
                 }
             }
             catch (IOException ex)
             {
-                Console.WriteLine($"HandleClient caught an IOException: {ex.Message}"); //.Message as just ex is quite verbose
+                Console.WriteLine($"HandleClient caught an IOException: {ex}"); //.Message as just ex is quite verbose
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"HandleClient caught an Exception: {ex.Message}"); //.Message as just ex is quite verbose
+                Console.WriteLine($"HandleClient caught an Exception: {ex}"); //.Message as just ex is quite verbose
             }
             finally
             {

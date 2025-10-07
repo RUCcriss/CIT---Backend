@@ -60,7 +60,7 @@ namespace Server
                             var data = request.Body.FromJson<Dictionary<string, string>>();
                             Console.WriteLine($"Got category: {data["name"]}");
                             int idAdded = categoryService.CreateCategory(data["name"]); // WARN: Assumes this cannot fail
-                            Util.sendResponse(new Response() { Status = "2 Created", Body = (new { cid = idAdded, name = data["name"] }).ToJson() }, client);
+                            Util.sendResponse(new Response() { Status = "2 Created", Body = (new { Cid = idAdded, Name = data["name"] }).ToJson() }, client);
                             break;
                         case "read":
                             break;
@@ -85,7 +85,7 @@ namespace Server
                     }
 
                     //Placeholder response
-                    Util.sendResponse(new Response() { Status = "6 Error", Body = null }, client);
+                    //Util.sendResponse(new Response() { Status = "6 Error" }, client);
                 }
             }
             catch (IOException ex)

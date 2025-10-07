@@ -65,6 +65,16 @@ namespace Server
                         case "read":
                             break;
                         case "update":
+                            var dataToUpdate = request.Body.FromJson<Dictionary<string, string>>();
+                            Console.WriteLine($"Got category: {dataToUpdate.ToString()}");
+                            if (urlParser.Id == dataToUpdate["cid"] && categoryService.UpdateCategory(int.Parse(urlParser.Id), dataToUpdate["name"]))
+                            {
+                                Util.sendResponse(new Response() { Status = "3 Updated" }, client);
+                            }
+                            else
+                            {
+                                Util.sendResponse(new Response() { Status = "5 Not Found" }, client);
+                            }
                             break;
                         case "delete":
                             if (categoryService.DeleteCategory(int.Parse(urlParser.Id)))

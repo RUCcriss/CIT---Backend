@@ -22,7 +22,7 @@ namespace Utility
             if (url == null) return false;
 
             //RegEx for splitting path into group for path and potentially id
-            string expression = @"^(/[^/]+/[^/]+)(?:/(d+))?$"; // verbatim used to avoid escape charecters
+            string expression = @"^(\/[^\/]+\/[^\/]+)(?:\/(\d+))?$"; // verbatim used to avoid escape charecters
 
             Match match = Regex.Match(url, expression);
 

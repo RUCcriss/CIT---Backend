@@ -25,44 +25,12 @@ namespace Utility
     {
         private List<string> acceptedM = new List<string> { "read", "create", "echo", "delete", "update" };
 
-        public Response ValidateRequest(Request request)
+        public Response ValidateRequest(Request request, UrlParser urlParser)
         {
             List<string> Errors = new List<string>();
 
-            //Method
+            //Check if method is missing --> else do validation of crud request
             if (string.IsNullOrEmpty(request.Method)) Errors.Add("missing method");
-            else if (!acceptedM.Contains(request.Method)) Errors.Add("illegal method");
-
-            if (request.Method != "read") // WARN: although there is no test for it, it should be pointed out that method = "read" should then have no body
-            {
-                if (string.IsNullOrEmpty(request.Body))
-                {
-                    Errors.Add("missing body");
-                    // In cases of method = `create` or `update`
-                }
-                else if (request.Method == "create" || request.Method == "update")
-                {
-
-                    try
-                    {
-                        JsonDocument.Parse(request.Body);
-                    }
-                    catch (JsonException)
-                    {
-                        Errors.Add("illegal body");
-                    }
-                }
-                else if (request.Method == "echo")
-                { // if instead echo
-                  //Should not be a problem. although we might want to check that it is a string (somehow?)
-                }
-
-            }
-
-            // WARN: Be aware that the delete method is not handled at all, since the protocol documentation does not seem to specify how delete is to be handled yet.
-
-            //Path
-            if (string.IsNullOrEmpty(request.Path)) Errors.Add("missing path");
 
             //Date
             long dateValue; //needed for TryParse
@@ -70,7 +38,35 @@ namespace Utility
             else if (!long.TryParse(request.Date, out dateValue)) Errors.Add("illegal date"); //Cant parse from string
             else if (long.Parse(request.Date) < 0) Errors.Add("illegal date"); //UNIX time does not go negative
 
-            //Body
+            //CRUD might as well start with parseUrl
+            if (string.IsNullOrEmpty(request.Path) && request.Method != "echo") Errors.Add("missing path");
+            bool parseResult = urlParser.ParseUrl(request.Path);
+            if (!parseResult && request.Method != "echo") Errors.Add("bad request");
+
+            switch (request.Method)
+            {
+                case "create":
+                    if (urlParser.HasId) Errors.Add("bad request");
+                    if (string.IsNullOrEmpty(request.Body)) Errors.Add("missing body");
+                    if (!hasJsonBody(request.Body)) Errors.Add("illegal body");
+                    break;
+                case "read":
+                    break;
+                case "update":
+                    if (!urlParser.HasId) Errors.Add("bad request");
+                    if (string.IsNullOrEmpty(request.Body)) Errors.Add("missing body");
+                    if (!hasJsonBody(request.Body)) Errors.Add("illegal body");
+                    break;
+                case "delete":
+                    if (!urlParser.HasId) Errors.Add("bad request");
+                    break;
+                case "echo":
+                    if (String.IsNullOrEmpty(request.Body)) Errors.Add("missing body");
+                    break;
+                default:
+                    Errors.Add("illegal method");
+                    break;
+            }
 
             //Return response
             if (Errors.Count > 0)
@@ -81,11 +77,27 @@ namespace Utility
                     Body = null
                 };
             }
+
             return new Response
             {
                 Status = "1 Ok",
                 Body = null
             };
+        }
+
+        private static bool hasJsonBody(string? body)
+        {
+            if (body == null) return false; //to get rid of possible null reference warning (warning CS8604)
+
+            try
+            {
+                JsonDocument.Parse(body);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

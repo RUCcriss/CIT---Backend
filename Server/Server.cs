@@ -39,7 +39,7 @@ namespace Server
                 Request request = Util.parseStreamToRequest(stream);
                 RequestValidator requestValidator = new RequestValidator();
                 Response validatorResponse = requestValidator.ValidateRequest(request);
-                if (validatorResponse.Status != "1 OK")
+                if (validatorResponse.Status != "1 ok")
                 {
                     // Da requestValidator.ValidateRequest() returnerer fejlkoder for malforme requests, kan vi som udgangspunkt blot sende fejlkoderne direkte tilbage til client.
                     Util.sendResponse(validatorResponse, client);

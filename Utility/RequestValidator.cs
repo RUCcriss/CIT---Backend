@@ -29,9 +29,8 @@ namespace Utility
         {
             List<string> Errors = new List<string>();
 
-            //Check if method is missing or echo --> else do validation of crud request
+            //Check if method is missing --> else do validation of crud request
             if (string.IsNullOrEmpty(request.Method)) Errors.Add("missing method");
-            else if (request.Method == "echo") goto returnOk; //echo has no relevant checks in validation
 
             //Date
             long dateValue; //needed for TryParse
@@ -62,6 +61,9 @@ namespace Utility
                 case "delete":
                     if (!urlParser.HasId) Errors.Add("bad request");
                     break;
+                case "echo":
+                    if (String.IsNullOrEmpty(request.Body)) Errors.Add("missing body");
+                    break;
                 default:
                     Errors.Add("illegal method");
                     break;
@@ -77,8 +79,6 @@ namespace Utility
                 };
             }
 
-        //In case no errors, we can return "1 OK"
-        returnOk: //label for jumping to via goto
             return new Response
             {
                 Status = "1 Ok",

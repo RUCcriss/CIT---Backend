@@ -11,9 +11,9 @@ namespace Utility
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        public Category(int cid, string name)
+        public Category(int id, string name)
         {
-            this.Id = cid;
+            this.Id = id;
             this.Name = name;
         }
     }
